@@ -13,11 +13,17 @@ on:
       - '.github/workflows/github-action.yml'
 
 jobs:
-  login_to_registry:
-    name: Login to GitHub Packages
+  build_and_push:
+    name: Build and push firmware
     runs-on: ubuntu-latest
     env:
+      BOARD: mks_robin_lite_maple
+      USE_REPO: https://github.com/schmttc/EasyThreeD-K7-STM32
+      USE_BRANCH: ET4000PLUS-K9
+      #USE_BRANCH: bugfix-2.0.x
+      #USE_TAG: 2.0.9.3
       REGISTRY: ghcr.io
+
     steps:
       - name: Preparation
         id: prep
@@ -37,18 +43,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           logout: false
-
-  build_and_push:
-    name: Build and push firmware
-    runs-on: ubuntu-latest
-    env:
-      BOARD: mks_robin_lite_maple
-      USE_REPO: https://github.com/schmttc/EasyThreeD-K7-STM32
-      USE_BRANCH: ET4000PLUS-K9
-      #USE_BRANCH: bugfix-2.0.x
-      #USE_TAG: 2.0.9.3
-
-    steps:
+    
       - name: Check out repo
         uses: actions/checkout@v2
 
