@@ -13,25 +13,31 @@ on:
       - '.github/workflows/github-action.yml'
 
 jobs:
-  - name: Preparation
-    id: prep
-    run: |
-      REGISTRY="ghcr.io"
-      IMAGE="${REGISTRY}/${{ github.repository }}/${{ github.event.repository.name }}"
-      TAGS="${IMAGE}:${{ github.sha }}"
-      if [[ $GITHUB_REF == ref/head/master ]]; then
-        TAGS="${TAGS},${IMAGE}:latest"
-      fi
-      echo ::set-output name=tags::${TAGS}
+  login_to_registry:
+    name: Login to GitHub Packages
+    runs-on: ubuntu-latest
+    env:
+      REGISTRY: ghcr.io
+    steps:
+      - name: Preparation
+        id: prep
+        run: |
+          REGISTRY="ghcr.io"
+          IMAGE="${REGISTRY}/${{ github.repository }}/${{ github.event.repository.name }}"
+          TAGS="${IMAGE}:${{ github.sha }}"
+          if [[ $GITHUB_REF == ref/head/master ]]; then
+            TAGS="${TAGS},${IMAGE}:latest"
+          fi
+          echo ::set-output name=tags::${TAGS}
 
-  - name: Log in to the Container registry
-    uses: docker/login-action@v1
-    with:
-      registry: ${{ env.REGISTRY }}
-      username: ${{ github.actor }}
-      password: ${{ secrets.GITHUB_TOKEN }}
-      logout: false
-          
+      - name: Log in to the Container registry
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          logout: false
+
   build_and_push:
     name: Build and push firmware
     runs-on: ubuntu-latest
