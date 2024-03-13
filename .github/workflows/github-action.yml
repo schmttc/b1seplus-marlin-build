@@ -35,7 +35,7 @@ jobs:
             -e USE_REPO \
             -v $(pwd)/Firmware/Builds:/home/platformio/build \
             -v $(pwd)/Firmware/Configuration:/home/platformio/CustomConfiguration \
-             ghcr.io/schmttc/marlin-build:master
+             ghcr.io/schmttc/marlin-build:working
 
       - name: Push firmware
         run: |
