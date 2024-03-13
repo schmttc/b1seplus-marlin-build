@@ -47,6 +47,10 @@ jobs:
       - name: Check out repo
         uses: actions/checkout@v2
 
+      - name: Pull docker image
+        run: |
+          docker pull ghcr.io/schmttc/marlin-build:working
+
       - name: Compile firmware
         run: |
           docker run \
