@@ -7,8 +7,8 @@ RUN useradd -s /bin/sh -d /home/platformio -m docker
 USER docker:docker
 
 # Install PlatformIO Core
-RUN python3 -c "$(curl -fsSL -o get-platformio.py https://raw.githubusercontent.com/platformio/platformio-core-installer/master/get-platformio.py
-python3 get-platformio.py)"
+RUN python3 -c "$(curl -fsSL -o get-platformio.py https://raw.githubusercontent.com/platformio/platformio-core-installer/master/get-platformio.py)"
+
 ENV PATH=/home/platformio/.platformio/penv/bin:$PATH
 
 # Clone MarlinFirmware repository, checkout latest release tag
