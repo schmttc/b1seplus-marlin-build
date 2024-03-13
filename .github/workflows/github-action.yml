@@ -3,7 +3,9 @@
 name: Build Marlin Firmware
 
 on:
-  push:
+  #push:
+  workflow_dispatch:
+
     branches:
       - main
     paths:
@@ -15,10 +17,9 @@ jobs:
     name: Build and push firmware
     runs-on: ubuntu-latest
     env:
-      #BOARD: BIGTREE_SKR_2
-      BOARD: BIGTREE_SKR_2
-      #USE_REPO: https://github.com/MarlinFirmware/Marlin
-      USE_BRANCH: 2.1.x 
+      BOARD: mks_robin_lite_maple
+      USE_REPO: https://github.com/schmttc/EasyThreeD-K7-STM32
+      USE_BRANCH: ET4000PLUS-K9
       #USE_BRANCH: bugfix-2.0.x
       #USE_TAG: 2.0.9.3
 
@@ -34,7 +35,7 @@ jobs:
             -e USE_REPO \
             -v $(pwd)/Firmware/Builds:/home/platformio/build \
             -v $(pwd)/Firmware/Configuration:/home/platformio/CustomConfiguration \
-             ghcr.io/tinuva/b1seplus-marlin-build:master
+             ghcr.io/schmttc/marlin-build:master
 
       - name: Push firmware
         run: |
