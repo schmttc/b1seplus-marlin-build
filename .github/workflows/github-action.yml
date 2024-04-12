@@ -49,7 +49,7 @@ jobs:
 
       - name: Pull docker image
         run: |
-          docker pull ghcr.io/schmttc/marlin-build:working
+          docker pull ghcr.io/schmttc/marlin-build:latest
 
       - name: Compile firmware
         run: |
@@ -59,7 +59,7 @@ jobs:
             -e USE_REPO \
             -v $(pwd)/Firmware/Builds:/home/platformio/build \
             -v $(pwd)/Firmware/Configuration:/home/platformio/CustomConfiguration \
-             ghcr.io/schmttc/marlin-build:working
+             ghcr.io/schmttc/marlin-build:latest
 
       - name: Push firmware
         run: |
