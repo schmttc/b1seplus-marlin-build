@@ -1,6 +1,6 @@
 # This a Github Action for automatically building Marlin Firmware when you push a commit to master.
 
-name: Build Marlin Firmware
+name: Build Marlin Firmware ET4000PLUS-K9
 
 on:
   #push:
@@ -23,6 +23,7 @@ jobs:
       #USE_BRANCH: bugfix-2.0.x
       #USE_TAG: 2.0.9.3
       REGISTRY: ghcr.io
+      UPLOAD_DIR: ET4000PLUS-K9
 
     steps:
       - name: Preparation
