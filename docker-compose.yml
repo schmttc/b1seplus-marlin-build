@@ -9,7 +9,7 @@ services:
     stdin_open: true
     tty: true
     environment:
-      - BOARD
+      - BOARD=mks_robin_lite_maple
       # - USE_LATEST=true # Use latest git tag
       # - USE_REPO=https://github.com/frealmyr/Marlin # USe a different git repo
       # - USE_TAG=2.0.7.1 # Use a specific release tag
