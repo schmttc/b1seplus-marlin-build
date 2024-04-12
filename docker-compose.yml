@@ -3,13 +3,12 @@ version: "3.5"
 services:
   build:
     container_name: marlin-build
-    # image: schmttc/marlin-build:latest
-    image: frealmyr/marlin-build:latest
+    image: schmttc/marlin-build:latest
     user: 1000:1000
     stdin_open: true
     tty: true
     environment:
-      - BOARD=mks_robin_lite_maple
+      # - BOARD=mks_robin_lite_maple
       # - USE_LATEST=true # Use latest git tag
       # - USE_REPO=https://github.com/frealmyr/Marlin # USe a different git repo
       # - USE_TAG=2.0.7.1 # Use a specific release tag
