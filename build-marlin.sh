@@ -41,7 +41,7 @@ CONFIG_CHECK=$(ls -1 /home/platformio/CustomConfiguration/*.h 2>/dev/null | wc -
 if [ $CONFIG_CHECK = 0 ]
 then
   printf "\n\e[1;31mNo custom configuration files detected! \e[0maborting..\n"
-  exit 1
+#  exit 1
 fi
 
 # Copy custom configuration files to Marlin folder
