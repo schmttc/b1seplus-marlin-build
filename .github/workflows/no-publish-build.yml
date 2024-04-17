@@ -29,7 +29,11 @@ jobs:
         with:
           name: myimage
           path: /tmp/myimage.tar
-  
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+
   firmware_build:
     needs: docker_image_build
     name: Build and push firmware
@@ -43,12 +47,12 @@ jobs:
       REGISTRY: ghcr.io
       UPLOAD_DIR: ET4000PLUS-K9
     steps:
-      - name: Download artifact
+      - name: Download Docker Image
         uses: actions/download-artifact@v2
         with:
           name: myimage
           path: /tmp
-      - name: Load image
+      - name: Load Docker Image
         run: |
           docker load --input /tmp/myimage.tar
           docker image ls -a
@@ -65,3 +69,11 @@ jobs:
             -v $(pwd)/Firmware/Builds:/home/platformio/build \
             -v $(pwd)/Firmware/Configuration:/home/platformio/CustomConfiguration \
              marlin-build:latest
+
+      - name: Push firmware
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "Compiled firmware"
+          git push

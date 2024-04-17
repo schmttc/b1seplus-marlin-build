@@ -67,11 +67,11 @@ else
 fi
 
 if [[ ${success} -eq 0 ]]; then
-  OUTPUT_DIR=/home/platformio/build/$UPLOAD_DIR
+  OUTPUT_DIR=/home/platformio/build/$BOARD
   mkdir -p $OUTPUT_DIR
 
   printf "\nCopying compiled firmware to output folder..\n"
-  cd /home/platformio/Marlin/.pio/build/$UPLOAD_DIR
+  cd /home/platformio/Marlin/.pio/build/$BOARD
 
   if [ $(find . -name "*.${FW_EXTENSION}") ];
   then
