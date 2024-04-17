@@ -1,0 +1,59 @@
+name: Ephemeral Container Firmware Build
+
+on:
+  workflow_dispatch:
+    branches:
+      - main
+
+jobs:
+  docker_image_build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    paths-ignore:
+      - 'README.md'
+      - '.gitignore'
+      - 'examples/**'
+      - 'docker-compose.yml'
+      - 'Firmware/Configuration/**.h'
+      - '.github/workflows/github-action.yml'
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: Preparation
+        id: prep
+        run: |
+          REGISTRY="ghcr.io"
+          IMAGE="${REGISTRY}/${{ github.repository }}/${{ github.event.repository.name }}"
+          TAGS="${IMAGE}:${{ github.sha }}"
+          if [[ $GITHUB_REF == ref/head/master ]]; then
+            TAGS="${TAGS},${IMAGE}:latest"
+          fi
+          echo ::set-output name=tags::${TAGS}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+    name: Build and push firmware
+    runs-on: ubuntu-latest
+    paths:
+      - 'Firmware/Configuration/**.h'
+      - '.github/workflows/github-action.yml'
+    env:
+      BOARD: mks_robin_lite_maple
+      USE_REPO: https://github.com/schmttc/EasyThreeD-K7-STM32
+      USE_BRANCH: ET4000PLUS-K9
+      #USE_BRANCH: bugfix-2.0.x
+      #USE_TAG: 2.0.9.3
+      REGISTRY: ghcr.io
+      UPLOAD_DIR: ET4000PLUS-K9
+    steps:
+      - name: Compile firmware
+        run: |
+          docker run \
+            -u root:root \
+            -e BOARD \
+            -e USE_REPO \
+            -v $(pwd)/Firmware/Builds:/home/platformio/build \
+            -v $(pwd)/Firmware/Configuration:/home/platformio/CustomConfiguration \
+             ghcr.io/schmttc/marlin-build:working

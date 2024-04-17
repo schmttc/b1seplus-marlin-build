@@ -40,14 +40,14 @@ fi
 CONFIG_CHECK=$(ls -1 /home/platformio/CustomConfiguration/*.h 2>/dev/null | wc -l)
 if [ $CONFIG_CHECK = 0 ]
 then
-  printf "\n\e[1;31mNo custom configuration files detected! \e[0maborting..\n"
+  printf "\n\e[1;31mNo custom configuration files detected! \e[0m\n"
 #  exit 1
-fi
-
+else
 # Copy custom configuration files to Marlin folder
 while IFS= read -r line; do
   cp /home/platformio/CustomConfiguration/${line}.h /home/platformio/Marlin/Marlin/${line}.h
 done <<< $(find /home/platformio/CustomConfiguration/ -name '*.h' -exec basename {} .h \;)
+fi
 
 # Change the default board with value in environment variable
 sed -i "s/default_envs = .*/default_envs = $BOARD/g" /home/platformio/Marlin/platformio.ini
