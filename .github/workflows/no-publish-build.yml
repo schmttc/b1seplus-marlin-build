@@ -23,7 +23,12 @@ jobs:
           context: .
           push: false
           tags: marlin-build:latest
-
+          outputs: type=docker,dest=/tmp/myimage.tar # export docker image
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: myimage
+          path: /tmp/myimage.tar
   
   firmware_build:
     needs: docker_image_build
@@ -38,8 +43,19 @@ jobs:
       REGISTRY: ghcr.io
       UPLOAD_DIR: ET4000PLUS-K9
     steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: myimage
+          path: /tmp
+        - name: Load image
+        run: |
+          docker load --input /tmp/myimage.tar
+          docker image ls -a
+
       - name: Check out repo
         uses: actions/checkout@v2
+
       - name: Compile firmware
         run: |
           docker run \
