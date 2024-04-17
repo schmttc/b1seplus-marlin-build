@@ -33,7 +33,7 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
-
+  firmware_build:
     name: Build and push firmware
     runs-on: ubuntu-latest
     paths:
