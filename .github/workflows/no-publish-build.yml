@@ -6,7 +6,8 @@ on:
       - main
 
 jobs:
-
+# Save a docker image to use later
+# https://github.com/orgs/community/discussions/26723
   docker_image_build:
     name: Build Docker Image
     runs-on: ubuntu-latest
@@ -14,32 +15,15 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v2
 
-      - name: Preparation
-        id: prep
-        run: |
-          REGISTRY="ghcr.io"
-          IMAGE="${REGISTRY}/${{ github.repository }}/${{ github.event.repository.name }}"
-          TAGS="${IMAGE}:${{ github.sha }}"
-          if [[ $GITHUB_REF == ref/head/master ]]; then
-            TAGS="${TAGS},${IMAGE}:latest"
-          fi
-          echo ::set-output name=tags::${TAGS}
-
-      - name: Set up Docker Buildx
+       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
   
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v3
-        with:
-          images: ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ github.event.repository.name }}
-
       - uses: docker/build-push-action@v3
         with:
           context: .
           push: false
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: marlin-build:latest
+
   
   firmware_build:
     needs: docker_image_build
@@ -64,4 +48,4 @@ jobs:
             -e USE_REPO \
             -v $(pwd)/Firmware/Builds:/home/platformio/build \
             -v $(pwd)/Firmware/Configuration:/home/platformio/CustomConfiguration \
-             ghcr.io/schmttc/marlin-build:working
+             marlin-build:latest
